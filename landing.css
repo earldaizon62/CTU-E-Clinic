@@ -198,6 +198,81 @@ body {
     box-shadow: 0 22px 38px rgba(245, 184, 75, 0.36);
 }
 
+/* Contact Section */
+.contact {
+    padding: clamp(40px, 6vw, 80px) max(24px, calc((100vw - 1180px) / 2));
+    background: linear-gradient(135deg, var(--soft) 0%, rgba(244, 248, 250, 0.8) 100%);
+    text-align: center;
+    border-radius: var(--radius);
+    margin: 40px auto;
+    max-width: 1180px;
+    box-shadow: var(--shadow);
+}
+
+.contact h2 {
+    color: var(--primary);
+    font-size: clamp(28px, 4vw, 42px);
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+
+.contact p {
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contact ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.contact li {
+    background: var(--surface);
+    padding: 24px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--line);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact li:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(10, 45, 62, 0.15);
+}
+
+.contact a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease;
+}
+
+.contact a:hover {
+    color: var(--accent);
+}
+
+.contact a::before {
+    content: "📧";
+    font-size: 20px;
+}
+
+.contact a[href^="tel"]::before {
+    content: "📞";
+}
+
 .section-heading {
     width: min(760px, 100%);
     margin: 0 auto 34px;
@@ -266,17 +341,8 @@ body {
     border-radius: 14px;
     background: rgba(15, 111, 143, 0.1);
     color: var(--primary);
-    font-size: 0;
+    font-size: 24px;
     font-weight: 850;
-}
-
-.feature-card:nth-child(1) .feature-icon::before { content: "01"; }
-.feature-card:nth-child(2) .feature-icon::before { content: "02"; }
-.feature-card:nth-child(3) .feature-icon::before { content: "03"; }
-.feature-card:nth-child(4) .feature-icon::before { content: "04"; }
-
-.feature-icon::before {
-    font-size: 14px;
 }
 
 .feature-card h3 {

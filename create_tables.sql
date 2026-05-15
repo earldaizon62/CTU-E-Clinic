@@ -51,4 +51,5 @@ INSERT INTO users (username, password, role) VALUES ('admin', '$2y$10$Li7MeQmdGV
 -- Insert sample students
 INSERT INTO students (name, student_id, course, section) VALUES
 ('Earl Jasper Moniño', '8240425', 'BSIT', '2A'),
-('Mark Francis Tumlad', '8241067', 'BSIT', '2A');
+('Mark Francis Tumlad', '8241067', 'BSIT', '2A'),
+('Trisha Bacia', '8240002', 'BSIT', '2A');
