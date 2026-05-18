@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
-    $stmt = $pdo->query("SELECT * FROM students");
+    $stmt = $pdo->query("SELECT s.*, sp.contact_number, sp.email_address, sp.allergies, sp.medications, sp.medical_conditions FROM students s LEFT JOIN student_profiles sp ON s.student_id = sp.student_id");
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 } elseif ($method === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);

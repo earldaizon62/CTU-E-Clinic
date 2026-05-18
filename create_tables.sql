@@ -9,6 +9,16 @@ CREATE TABLE students (
     section VARCHAR(50)
 );
 
+CREATE TABLE student_profiles (
+    student_id VARCHAR(50) PRIMARY KEY,
+    contact_number VARCHAR(50),
+    email_address VARCHAR(255),
+    allergies TEXT,
+    medications TEXT,
+    medical_conditions TEXT,
+    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE
+);
+
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
