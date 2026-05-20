@@ -1,6 +1,6 @@
 <?php
+require 'config.php'; // sets session cookie options
 session_start();
-require 'config.php';
 
 header('Content-Type: application/json');
 
@@ -44,13 +44,10 @@ if ($method === 'GET') {
 
             $stmt = $pdo->prepare($sql);
             $stmt->execute($params);
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            echo json_encode($results);
+            echo json_encode($stmt->fetchAll());
             exit;
         }
 
-        // FIX: student_id missing from session means the user account
-        // was created without linking to a student record
         if (!$studentId) {
             http_response_code(400);
             echo json_encode([
@@ -67,7 +64,7 @@ if ($method === 'GET') {
              WHERE s.student_id = ?"
         );
         $stmt->execute([$studentId]);
-        $profile = $stmt->fetch(PDO::FETCH_ASSOC);
+        $profile = $stmt->fetch();
 
         if (!$profile) {
             http_response_code(404);
@@ -112,13 +109,13 @@ if ($method === 'PUT') {
         exit;
     }
 
-    $name             = trim($data['fullName'] ?? '');
-    $course           = trim($data['course'] ?? '');
-    $section          = trim($data['section'] ?? '');
-    $contactNumber    = trim($data['contactNumber'] ?? '');
-    $emailAddress     = trim($data['emailAddress'] ?? '');
-    $allergies        = trim($data['allergies'] ?? '');
-    $medications      = trim($data['medications'] ?? '');
+    $name              = trim($data['fullName']          ?? '');
+    $course            = trim($data['course']            ?? '');
+    $section           = trim($data['section']           ?? '');
+    $contactNumber     = trim($data['contactNumber']     ?? '');
+    $emailAddress      = trim($data['emailAddress']      ?? '');
+    $allergies         = trim($data['allergies']         ?? '');
+    $medications       = trim($data['medications']       ?? '');
     $medicalConditions = trim($data['medicalConditions'] ?? '');
 
     if (!$name || !$course || !$section || !$contactNumber || !$emailAddress) {
@@ -133,24 +130,20 @@ if ($method === 'PUT') {
     try {
         $pdo->beginTransaction();
 
-        $updateStudent = $pdo->prepare(
-            'UPDATE students SET name = ?, course = ?, section = ? WHERE student_id = ?'
-        );
-        $updateStudent->execute([$name, $course, $section, $studentId]);
+        $pdo->prepare('UPDATE students SET name = ?, course = ?, section = ? WHERE student_id = ?')
+            ->execute([$name, $course, $section, $studentId]);
 
         $stmt = $pdo->prepare('SELECT student_id FROM student_profiles WHERE student_id = ?');
         $stmt->execute([$studentId]);
 
         if ($stmt->fetch()) {
-            $updateProfile = $pdo->prepare(
+            $pdo->prepare(
                 'UPDATE student_profiles SET contact_number = ?, email_address = ?, allergies = ?, medications = ?, medical_conditions = ? WHERE student_id = ?'
-            );
-            $updateProfile->execute([$contactNumber, $emailAddress, $allergies, $medications, $medicalConditions, $studentId]);
+            )->execute([$contactNumber, $emailAddress, $allergies, $medications, $medicalConditions, $studentId]);
         } else {
-            $insertProfile = $pdo->prepare(
+            $pdo->prepare(
                 'INSERT INTO student_profiles (student_id, contact_number, email_address, allergies, medications, medical_conditions) VALUES (?, ?, ?, ?, ?, ?)'
-            );
-            $insertProfile->execute([$studentId, $contactNumber, $emailAddress, $allergies, $medications, $medicalConditions]);
+            )->execute([$studentId, $contactNumber, $emailAddress, $allergies, $medications, $medicalConditions]);
         }
 
         $pdo->commit();
